@@ -1,2 +1,2 @@
 # CryptoZombies
-CryptoZombies is a Blockchain Based Game. 
+CryptoZombies is a Ethereum Blockchain Based Game. 
