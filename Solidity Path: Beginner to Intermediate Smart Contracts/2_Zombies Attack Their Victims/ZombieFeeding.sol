@@ -1,5 +1,31 @@
-pragma solidity >=0.5.0 <0.6.0;
 
+/*
+internal:- internal is the same as private, except that it's also accessible to contracts that inherit from this contract.
+external:- external is similar to public, except that these functions can ONLY be called outside the contract — they can't be
+           called by other functions inside that contract.
+*/
+/*
+function multipleReturns() internal returns(uint a, uint b, uint c) {
+  return (1, 2, 3);
+}
+
+function processMultipleReturns() external {
+  uint a;
+  uint b;
+  uint c;
+  // This is how you do multiple assignment:
+  (a, b, c) = multipleReturns();
+}
+
+// Or if we only cared about one of the values:
+function getLastReturnValue() external {
+  uint c;
+  // We can just leave the other fields blank:
+  (,,c) = multipleReturns();
+}
+*/
+
+pragma solidity >=0.5.0 <0.6.0;
 import "./Zombiefactory.sol";
 
 contract KittyInterface {
