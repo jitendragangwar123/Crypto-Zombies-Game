@@ -1,3 +1,38 @@
+/*
+Why is gas necessary?
+:- When you execute a function, every single node on the network needs to run 
+   that same function to verify its output —thousands of nodes verifying every function 
+   execution is what makes Ethereum decentralized,and its data immutable and censorship-resistant.
+*/
+
+/*
+Struct packing to save gas?
+:-using uint8 instead of uint (uint256) won't save you any gas.
+:-If you have multiple uints inside a struct, using a smaller-sized uint when possible will 
+  allow Solidity to pack these variables together to take up less storage.
+:-For example:
+        struct NormalStruct {
+          uint a;
+          uint b;
+          uint c;
+        }
+
+        struct MiniMe {
+          uint32 a;
+          uint32 b;
+          uint c;
+        }
+
+        // `mini` will cost less gas than `normal` because of struct packing
+        NormalStruct normal = NormalStruct(10, 20, 30);
+        MiniMe mini = MiniMe(10, 20, 30); 
+ */
+ 
+ /*
+ :-A struct with fields uint c; uint32 a; uint32 b; will cost less gas than a struct with
+   fields uint32 a; uint c; uint32 b; because the uint32 fields are clustered together.
+ */
+
 pragma solidity >=0.5.0 <0.6.0;
 
 import "./ownable.sol";
@@ -12,6 +47,8 @@ contract ZombieFactory is Ownable {
     struct Zombie {
         string name;
         uint dna;
+        uint32 level;
+        uint32 readyTime;
     }
 
     Zombie[] public zombies;
