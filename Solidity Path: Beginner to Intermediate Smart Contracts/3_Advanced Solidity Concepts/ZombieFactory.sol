@@ -40,6 +40,21 @@ Struct packing to save gas?
    These will convert to a uint of the number of seconds in that length of time. So 1 minutes is 60, 
    1 hours is 3600 (60 seconds x 60 minutes), 1 days is 86400 (24 hours x 60 minutes x 60 seconds), etc.
  */
+ 
+ /*
+ Example:- 
+   uint lastUpdated;
+   // Set `lastUpdated` to `now`
+   function updateTimestamp() public {
+     lastUpdated = now;
+   }
+
+   // Will return `true` if 5 minutes have passed since `updateTimestamp` was 
+   // called, `false` if 5 minutes have not passed
+   function fiveMinutesHavePassed() public view returns (bool) {
+     return (now >= (lastUpdated + 5 minutes));
+   }
+ */
 
 pragma solidity >=0.5.0 <0.6.0;
 
