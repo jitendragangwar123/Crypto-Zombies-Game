@@ -38,7 +38,7 @@ storage:-
 
 pragma solidity >=0.5.0 <0.6.0;
 
-import "./Zombiefeeding.sol";
+import "./zombiefeeding.sol";
 
 contract ZombieHelper is ZombieFeeding {
 
@@ -58,12 +58,20 @@ contract ZombieHelper is ZombieFeeding {
   }
 
   function getZombiesByOwner(address _owner) external view returns(uint[] memory) {
+    uint[] memory result = new uint[](ownerZombieCount[_owner]);
     // Start here
-    uint[] memory result= new uint[](ownerZombieCount[_owner]);
+    uint counter=0;
+    for(uint i=0;i<zombies.length;i++){
+      if(zombieToOwner[i]==_owner){
+        result[counter]=i;
+        counter++;
+      }
+    }
     return result;
   }
 
 }
+
 
 /*
 :- 
@@ -79,5 +87,27 @@ function getArray() external pure returns(uint[] memory) {
   values[1] = 2;
   values[2] = 3;
   return values;
+}
+*/
+
+/*
+For loop :-
+Let's look at an example where we want to make an array of even numbers:
+
+function getEvens() pure external returns(uint[] memory) {
+  uint[] memory evens = new uint[](5);
+  // Keep track of the index in the new array:
+  uint counter = 0;
+  // Iterate 1 through 10 with a for loop:
+  for (uint i = 1; i <= 10; i++) {
+    // If `i` is even...
+    if (i % 2 == 0) {
+      // Add it to our array
+      evens[counter] = i;
+      // Increment counter to the next empty index in `evens`:
+      counter++;
+    }
+  }
+  return evens;
 }
 */
