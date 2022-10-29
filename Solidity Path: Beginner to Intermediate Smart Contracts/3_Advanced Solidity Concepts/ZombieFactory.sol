@@ -32,6 +32,14 @@ Struct packing to save gas?
  :-A struct with fields uint c; uint32 a; uint32 b; will cost less gas than a struct with
    fields uint32 a; uint c; uint32 b; because the uint32 fields are clustered together.
  */
+ 
+ /*
+ Time Uint:- 
+ :-The variable now will return the current unix timestamp of the latest block.
+ :-Solidity also contains the time units seconds, minutes, hours, days, weeks and years. 
+   These will convert to a uint of the number of seconds in that length of time. So 1 minutes is 60, 
+   1 hours is 3600 (60 seconds x 60 minutes), 1 days is 86400 (24 hours x 60 minutes x 60 seconds), etc.
+ */
 
 pragma solidity >=0.5.0 <0.6.0;
 
@@ -43,6 +51,8 @@ contract ZombieFactory is Ownable {
 
     uint dnaDigits = 16;
     uint dnaModulus = 10 ** dnaDigits;
+    //Define `cooldownTime` here
+    uint cooldownTime=1 days; //one day
 
     struct Zombie {
         string name;
@@ -57,7 +67,8 @@ contract ZombieFactory is Ownable {
     mapping (address => uint) ownerZombieCount;
 
     function _createZombie(string memory _name, uint _dna) internal {
-        uint id = zombies.push(Zombie(_name, _dna)) - 1;
+        //typecasting the readyTime
+        uint id = zombies.push(Zombie(_name, _dna,1,uint32(now+cooldownTime))) - 1;
         zombieToOwner[id] = msg.sender;
         ownerZombieCount[msg.sender]++;
         emit NewZombie(id, _name, _dna);
