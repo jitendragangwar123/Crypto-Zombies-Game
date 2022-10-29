@@ -16,17 +16,33 @@ function driveCar(uint _userId) public olderThan(16, _userId) {
 
 */
 
+/*
+calldata:- 
+         calldata is somehow similar to memory, but it's only available to external functions.
+*/
+
 
 pragma solidity >=0.5.0 <0.6.0;
 
 import "./zombiefeeding.sol";
 
 contract ZombieHelper is ZombieFeeding {
- 
-  // modifier also takes parameters
-  modifier aboveLevel(uint _level,uint _zombieId){
-    require(zombies[_zombieId].level>=_level);
+  
+  //create a modifier and pass the arguments
+  modifier aboveLevel(uint _level, uint _zombieId) {
+    require(zombies[_zombieId].level >= _level);
     _;
   }
 
+  // change Zombies name 
+  function changeName(uint _zombieId,string calldata _newName) external aboveLevel(2,_zombieId){
+    require(msg.sender==zombieToOwner[_zombieId]);
+    zombies[_zombieId].name=_newName;
+  }
+  // change Zombies Dna
+  function changeDna(uint _zombieId,uint _newDna) external aboveLevel(20,_zombieId){
+    require(msg.sender==zombieToOwner[_zombieId]);
+    zombies[_zombieId].dna=_newDna;
+  }
+}
 }
