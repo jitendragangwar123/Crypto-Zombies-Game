@@ -42,7 +42,7 @@ and address(this).balance will return the total balance stored on the contract.
 
 pragma solidity >=0.5.0 <0.6.0;
 
-import "./zombiefeeding.sol";
+import "./Zombiefeeding.sol";
 
 contract ZombieHelper is ZombieFeeding {
 
