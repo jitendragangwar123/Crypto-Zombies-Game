@@ -1,3 +1,11 @@
+/*
+balanceOf():-
+        This function simply takes an address, and returns how many tokens that address owns.
+ownerOf():-
+       This function takes a token ID (in our case, a Zombie ID), and returns the address of the person who owns it.
+*/
+
+
 pragma solidity >=0.5.0 <0.6.0;
 
 import "./Zombieattack.sol";
