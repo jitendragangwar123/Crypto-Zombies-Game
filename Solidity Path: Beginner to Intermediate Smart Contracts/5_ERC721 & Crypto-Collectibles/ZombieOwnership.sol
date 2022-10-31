@@ -31,7 +31,7 @@ in the other the owner or the approved receiver of the token calls it.
 pragma solidity >=0.5.0 <0.6.0;
 
 import "./Zombieattack.sol";
-import "./erc721.sol";
+import "./ERC721.sol";
 
 contract ZombieOwnership is ZombieAttack, ERC721 {
 
