@@ -6,7 +6,8 @@ ownerOf():-
 */
 
 /*
-Note that the ERC721 spec has 2 different ways to transfer tokens:
+transferFrom():-
+        The ERC721 spec has 2 different ways to transfer tokens:
 
         function transferFrom(address _from, address _to, uint256 _tokenId) external payable;
                                                 or
@@ -28,13 +29,25 @@ in the other the owner or the approved receiver of the token calls it.
 */
 
 
+/*
+approve():- 
+approve the transfer happens in 2 steps:
+
+1.You, the owner, call approve and give it the _approved address of the new owner, and the _tokenId you want them to take.
+
+2.The new owner calls transferFrom with the _tokenId. Next, the contract checks to make sure the new owner has been already approved,
+and then transfers them the token.
+
+*/
+
+
 pragma solidity >=0.5.0 <0.6.0;
+
 import "./zombieattack.sol";
 import "./ERC721.sol";
 
 contract ZombieOwnership is ZombieAttack, ERC721 {
 
-  // 1. Define mapping here
   mapping (uint => address) zombieApprovals;
 
   function balanceOf(address _owner) external view returns (uint256) {
@@ -53,15 +66,13 @@ contract ZombieOwnership is ZombieAttack, ERC721 {
   }
 
   function transferFrom(address _from, address _to, uint256 _tokenId) external payable {
-    // 2. Add the require statement here
-    // 3. Call _transfer
-    require(zombieToOwner[_tokenId]==msg.sender || zombieApprovals[_tokenId]==msg.sender);
-    _transfer(_from,_to,_tokenId);
-
+    require (zombieToOwner[_tokenId] == msg.sender || zombieApprovals[_tokenId] == msg.sender);
+    _transfer(_from, _to, _tokenId);
   }
 
-  function approve(address _approved, uint256 _tokenId) external payable {
-
+  function approve(address _approved, uint256 _tokenId) external payable onlyOwnerOf(_tokenId) {
+    zombieApprovals[_tokenId] = _approved;
+    //Fire the Approval event here
+    emit Approval(msg.sender,_approved,_tokenId);
   }
-
 }
