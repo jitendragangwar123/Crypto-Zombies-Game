@@ -39,10 +39,9 @@ and address(this).balance will return the total balance stored on the contract.
 
 
 
-
 pragma solidity >=0.5.0 <0.6.0;
 
-import "./Zombiefeeding.sol";
+import "./zombiefeeding.sol";
 
 contract ZombieHelper is ZombieFeeding {
 
@@ -53,14 +52,13 @@ contract ZombieHelper is ZombieFeeding {
     _;
   }
 
-  // 1. Create withdraw function here
-  function withdraw() external onlyOwner{
-    address payable _owner=address(uint160(owner()));
+  function withdraw() external onlyOwner {
+    address _owner = owner();
     _owner.transfer(address(this).balance);
   }
-  // 2. Create setLevelUpFee function here
-  function setLevelUpFee(uint _fee) external onlyOwner{
-    levelUpFee=_fee;
+
+  function setLevelUpFee(uint _fee) external onlyOwner {
+    levelUpFee = _fee;
   }
 
   function levelUp(uint _zombieId) external payable {
@@ -68,13 +66,15 @@ contract ZombieHelper is ZombieFeeding {
     zombies[_zombieId].level++;
   }
 
-  function changeName(uint _zombieId, string calldata _newName) external aboveLevel(2, _zombieId) {
-    require(msg.sender == zombieToOwner[_zombieId]);
+  // 1. Modify this function to use `ownerOf`:
+  function changeName(uint _zombieId, string calldata _newName) external aboveLevel(2, _zombieId) ownerOf(_zombieId){
+    //require(msg.sender == zombieToOwner[_zombieId]);
     zombies[_zombieId].name = _newName;
   }
 
-  function changeDna(uint _zombieId, uint _newDna) external aboveLevel(20, _zombieId) {
-    require(msg.sender == zombieToOwner[_zombieId]);
+  // 2. Do the same with this function:
+  function changeDna(uint _zombieId, uint _newDna) external aboveLevel(20, _zombieId) ownerOf(_zombieId){
+    //require(msg.sender == zombieToOwner[_zombieId]);
     zombies[_zombieId].dna = _newDna;
   }
 
