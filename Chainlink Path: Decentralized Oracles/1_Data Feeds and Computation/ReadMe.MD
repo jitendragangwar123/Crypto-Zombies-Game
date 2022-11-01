@@ -9,5 +9,5 @@ Chainlink:-
       :-You can then make protocols like Synthetix, Aave, and Compound with this!
       ```
       
-      ![price-feed-diagram](https://user-images.githubusercontent.com/76531339/199255089-08c25829-e7f1-4a39-8c41-bfa791e1b2da.png)
+ [price-feed-diagram](https://user-images.githubusercontent.com/76531339/199255089-08c25829-e7f1-4a39-8c41-bfa791e1b2da.png)
 
