@@ -7,7 +7,7 @@ Chainlink:-
       :-The Chainlink network uses a system called Off-Chain Reporting to reach a consensus on data off-chain, and report the data in a cryptographically proven 
       single transaction back on-chain for users to digest.
       :-You can then make protocols like Synthetix, Aave, and Compound with this!
-      ```
-      
- [price-feed-diagram](https://user-images.githubusercontent.com/76531339/199255089-08c25829-e7f1-4a39-8c41-bfa791e1b2da.png)
+ ```
+###Chainlink Process:-     
+![price-feed-diagram](https://user-images.githubusercontent.com/76531339/199256206-66cc3723-26cd-4cb9-b2d6-f52290b4c74c.png)
 
