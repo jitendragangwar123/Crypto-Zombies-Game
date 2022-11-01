@@ -8,6 +8,6 @@ Chainlink:-
       single transaction back on-chain for users to digest.
       :-You can then make protocols like Synthetix, Aave, and Compound with this!
  ```
-###Chainlink Process:-     
+### Chainlink Process:-     
 ![price-feed-diagram](https://user-images.githubusercontent.com/76531339/199256206-66cc3723-26cd-4cb9-b2d6-f52290b4c74c.png)
 
