@@ -8,27 +8,61 @@
     <script language="javascript" type="text/javascript" src="Cryptozombies_abi.js"></script>
   </head>
   <body>
+    <div id="zombies"></div>
 
     <script>
       var cryptoZombies;
+      var userAccount;
 
       function startApp() {
         var cryptoZombiesAddress = "YOUR_CONTRACT_ADDRESS";
         cryptoZombies = new web3js.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
+
+        var accountInterval = setInterval(function() {
+          // Check if account has changed
+          if (web3.eth.accounts[0] !== userAccount) {
+            userAccount = web3.eth.accounts[0];
+            // Call a function to update the UI with the new account
+            getZombiesByOwner(userAccount)
+            .then(displayZombies);
+          }
+        }, 100);
+      }
+
+      function displayZombies(ids) {
+        // Start here
+        $("#zombies").empty();
+        for(id of ids){
+            // Look up zombie details from our contract. Returns a `zombie` object
+            getZombieDetails(id)
+            .then(function(zombie) {
+
+            // Using ES6's "template literals" to inject variables into the HTML.
+            // Append each one to our #zombies div
+            $("#zombies").append(`<div class="zombie">
+              <ul>
+                <li>Name: ${zombie.name}</li>
+                <li>DNA: ${zombie.dna}</li>
+                <li>Level: ${zombie.level}</li>
+                <li>Wins: ${zombie.winCount}</li>
+                <li>Losses: ${zombie.lossCount}</li>
+                <li>Ready Time: ${zombie.readyTime}</li>
+              </ul>
+            </div>`);
+          });
+        }
       }
 
       function getZombieDetails(id) {
         return cryptoZombies.methods.zombies(id).call()
       }
 
-      // 1. Define `zombieToOwner` here
-      function zombieToOwner(id){
-        return cryptoZombies.methods.zombieToOwner(id).call();
+      function zombieToOwner(id) {
+        return cryptoZombies.methods.zombieToOwner(id).call()
       }
 
-      // 2. Define `getZombiesByOwner` here
-      function getZombiesByOwner(owner){
-        return cryptoZombies.methods.getZombiesByOwner(owner).call();
+      function getZombiesByOwner(owner) {
+        return cryptoZombies.methods.getZombiesByOwner(owner).call()
       }
 
       window.addEventListener('load', function() {
@@ -52,6 +86,7 @@
 
 
 
+
 /*
 :-Ethereum nodes only speak a language called JSON-RPC, which isn't very human-readable. 
 :-Interact with the functions by using web3.js:-
@@ -59,9 +94,7 @@ CryptoZombies.methods.createRandomZombie("Jite").send({ from: "0xb60e8dd61c5d32b
 */
 
 /* install web3.js Using NPM :-
-```shell
   npm install web3
-```
 */
 
 /*
@@ -79,19 +112,17 @@ Web3.js has two methods we will use to call functions on our contract:
 
 call():- 
   call is used for view and pure functions. It only runs on the local node, and won't create a transaction on the blockchain.
-  ```shell
-    myContract.methods.myMethod(123).call()
-  ```
+  myContract.methods.myMethod(123).call()
+ 
 send():- 
   send will create a transaction and change data on the blockchain. You'll need to use send for any functions that aren't view or pure.
-  ```shell
-   myContract.methods.myMethod(123).send()
-  ```
+  myContract.methods.myMethod(123).send()
+ 
 */
 
 /*
 Zombie[] public zombies;
-```shell
+
 function getZombieDetails(id) {
   return cryptoZombies.methods.zombies(id).call()
 }
@@ -101,10 +132,8 @@ getZombieDetails(15)
 .then(function(result) {
   console.log("Zombie 15: " + JSON.stringify(result));
 });
-```
 
 Results:-
-```shell
 {
   "name": "H4XF13LD MORRIS'S COOLER OLDER BROTHER",
   "dna": "1337133713371337",
@@ -113,5 +142,5 @@ Results:-
   "winCount": "999999999",
   "lossCount": "0" // Obviously.
 }
-```
+
 */
