@@ -34,13 +34,37 @@ Logs and Events:-
 :- result.receipt: an object containing the transaction receipt.     
 */
 
+/*
+Hooks:- 
+    :-In just a few minutes🤞, we'll have more than one test and the way this works is that 
+    each test should start with a clean sheet. Thus, for every single test we'll have to create a new instance of our smart contract.
+    :-One of Mocha's (and Truffle's) features is the ability to have some snippets of code called hooks run before or after a test. 
+    :-To run something before a test gets executed, the code should be put inside a function named beforeEach().
+    
+            beforeEach(async () => {
+              // let's put here the code that creates a new contract instance
+            });
+            
+    :-similar to the beforeEach() function explained above, we'll make a function called afterEach():
+
+            afterEach(async () => {
+                   await contractInstance.kill();
+                });            
+*/            
+
 const CryptoZombies = artifacts.require("CryptoZombies");
 const zombieNames = ["Zombie 1", "Zombie 2"];
 contract("CryptoZombies", (accounts) => {
     let [alice, bob] = accounts;
+    //by using hooks
+    let contractInstance;
+    beforeEach(async() =>{
+        contractInstance = await CryptoZombies.new();
+    });
+    
     it("should be able to create a new zombie", async () => {
         //Can use the contract abstraction to initialize our instance like this:-
-        const contractInstance = await CryptoZombies.new();
+       // const contractInstance = await CryptoZombies.new();
         //msg.sender is set to Alice's address
         const result=await contractInstance.createRandomZombie(zombieNames[0], {from: alice});
         //If result.receipt.status is equal to true it means that the transaction was successful
@@ -48,5 +72,9 @@ contract("CryptoZombies", (accounts) => {
         //Retrieve the name of Alice's newly created zombie 
         assert.equal(result.logs[0].args.name,zombieNames[0]);
     })
+    it("should not allow two zombies",async() => {
+
+    })
 })
+
 
