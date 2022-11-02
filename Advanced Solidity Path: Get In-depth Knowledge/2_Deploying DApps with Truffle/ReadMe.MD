@@ -1,4 +1,4 @@
-#### how you can use npm to install a package and make it available globally:-
+#### How you can use npm to install a package and make it available globally:-
 ```shell
 npm install truffle -g
 
@@ -17,7 +17,7 @@ truffle.js
 ```shell
  npm install truffle truffle-hdwallet-provider
 ```
- ### initialize our new project by running truffle init:-
+ ### Initialize our new project by running truffle init:-
  ```shell
  truffle init
  ```
