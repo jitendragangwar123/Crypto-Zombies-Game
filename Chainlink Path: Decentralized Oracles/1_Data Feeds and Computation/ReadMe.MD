@@ -10,4 +10,6 @@ Chainlink:-
  ```
 ### Chainlink Process:-     
 ![price-feed-diagram](https://user-images.githubusercontent.com/76531339/199256206-66cc3723-26cd-4cb9-b2d6-f52290b4c74c.png)
+### Chainlink VRF:-
+![chainlink-vrf](https://user-images.githubusercontent.com/76531339/199453738-e8c82005-655e-4052-bdd8-9f71b9c1c31a.png)
 
