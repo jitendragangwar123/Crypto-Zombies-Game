@@ -2,7 +2,7 @@
 Ganache:-
 :-You can do so by using a tool called Ganache, which sets up a local Ethereum network.
 :-Every time Ganache starts, it creates 10 test accounts and gives them 100 Ethers to make testing easier. 
-Since Ganache and Truffle are tightly integrated
+Since Ganache and Truffle are tightly integrated.
 */
 
 /* Writting the test cases for below function:-
@@ -50,10 +50,31 @@ Hooks:-
             afterEach(async () => {
                    await contractInstance.kill();
                 });            
-*/            
+*/  
+
+/*
+Chai Assertion Library:- npm -g install chai 
+        Three kinds of assertion styles bundled into Chai:-
+        expect: lets you chain natural language assertions as follows:
+                let lessonTitle = "Testing Smart Contracts with Truffle";
+                expect(lessonTitle).to.be.a("string");
+                let zombieName = 'My Awesome Zombie';
+                expect(zombieName).to.equal('My Awesome Zombie');
+                
+        should: allows for similar assertions as expect interface, but the chain starts with a should property:
+                let lessonTitle = "Testing Smart Contracts with Truffle";
+                lessonTitle.should.be.a("string");
+                
+        assert: provides a notation similar to that packaged with node.js and includes several additional tests and it's browser compatible:
+                let lessonTitle = "Testing Smart Contracts with Truffle";
+                assert.typeOf(lessonTitle, "string");
+
+*/
 
 const CryptoZombies = artifacts.require("CryptoZombies");
 const utils = require("./helpers/utils");
+const time = require("./helpers/time");
+var expect = require('chai').expect;
 const zombieNames = ["Zombie 1", "Zombie 2"];
 contract("CryptoZombies", (accounts) => {
     let [alice, bob] = accounts;
@@ -65,13 +86,16 @@ contract("CryptoZombies", (accounts) => {
     
     it("should be able to create a new zombie", async () => {
         //Can use the contract abstraction to initialize our instance like this:-
-       // const contractInstance = await CryptoZombies.new();
+        //const contractInstance = await CryptoZombies.new();
         //msg.sender is set to Alice's address
         const result=await contractInstance.createRandomZombie(zombieNames[0], {from: alice});
         //If result.receipt.status is equal to true it means that the transaction was successful
-        assert.equal(result.receipt.status,true);
+        //assert.equal(result.receipt.status,true);
+        expect(result.receipt.status).to.equal(true);
         //Retrieve the name of Alice's newly created zombie 
-        assert.equal(result.logs[0].args.name,zombieNames[0]);
+        //assert.equal(result.logs[0].args.name,zombieNames[0]);
+        expect(result.logs[0].args.name).to.equal(zombieNames[0]);
+
     })
     it("should not allow two zombies",async() => {
         await contractInstance.createRandomZombie(zombieNames[0],{from:alice});
@@ -89,6 +113,67 @@ contract("CryptoZombies", (accounts) => {
         await utils.shouldThrow(contractInstance.createRandomZombie(zombieNames[1],{from:alice}));
 
     })
+    //To group tests, Truffle provides a function called context. 
+     context("with the single-step transfer scenario", async () => {
+        it("should transfer a zombie", async () => {
+            const result = await contractInstance.createRandomZombie(zombieNames[0], {from: alice});
+            const zombieId = result.logs[0].args.zombieId.toNumber();
+            await contractInstance.transferFrom(alice, bob, zombieId, {from: alice});
+            const newOwner = await contractInstance.ownerOf(zombieId);
+            //TODO: replace with expect
+            //assert.equal(newOwner, bob);
+            expect(newOwner).to.equal(bob);
+        })
+    })
+    context("with the two-step transfer scenario", async () => {
+        it("should approve and then transfer a zombie when the approved address calls transferFrom", async () => {
+            const result = await contractInstance.createRandomZombie(zombieNames[0], {from: alice});
+            const zombieId = result.logs[0].args.zombieId.toNumber();
+            await contractInstance.approve(bob, zombieId, {from: alice});
+            await contractInstance.transferFrom(alice, bob, zombieId, {from: bob});
+            const newOwner = await contractInstance.ownerOf(zombieId);
+            //TODO: replace with expect
+            //assert.equal(newOwner,bob);
+            expect(newOwner).to.equal(bob);
+        })
+        it("should approve and then transfer a zombie when the owner calls transferFrom", async () => {
+            const result = await contractInstance.createRandomZombie(zombieNames[0], {from: alice});
+            const zombieId = result.logs[0].args.zombieId.toNumber();
+            await contractInstance.approve(bob, zombieId, {from: alice});
+            await contractInstance.transferFrom(alice, bob, zombieId, {from: alice});
+            const newOwner = await contractInstance.ownerOf(zombieId);
+            //TODO: replace with expect
+            //assert.equal(newOwner,bob);
+            expect(newOwner).to.equal(bob);
+         })
+    })
+    it("zombies should be able to attack another zombie", async () => {
+        let result;
+        result = await contractInstance.createRandomZombie(zombieNames[0], {from: alice});
+        const firstZombieId = result.logs[0].args.zombieId.toNumber();
+        result = await contractInstance.createRandomZombie(zombieNames[1], {from: bob});
+        const secondZombieId = result.logs[0].args.zombieId.toNumber();
+        await time.increase(time.duration.days(1));
+        await contractInstance.attack(firstZombieId, secondZombieId, {from: alice});
+        //TODO: replace with expect
+        //assert.equal(result.receipt.status, true);
+        expect(result.receipt.status).to.equal(true);
+    })
+    
+    
 })
+
+/*
+Ganache provides a way to move forward in time through two helper functions:-
+:-Every time a new block gets mined, the miner adds a timestamp to it. Let's say the transactions that created our 
+zombies got mined in block 5.
+
+1.evm_increaseTime:-
+        Next, we call evm_increaseTime but, since the blockchain is immutable, there is no way of modifying an existing block. 
+        So, when the contract checks the time, it will not be increased.
+2.evm_mine:-
+        If we run evm_mine, block number 6 gets mined (and timestamped) which means that, when we put the zombies to fight, 
+        the smart contract will "see" that a day has passed.
+*/
 
 
