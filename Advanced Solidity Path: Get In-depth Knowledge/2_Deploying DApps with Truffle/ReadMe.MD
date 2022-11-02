@@ -25,3 +25,11 @@ truffle.js
 ```shell
 truffle compile
 ```
+HD Wallet-enabled Web3 provider
+        Use it to sign transactions for addresses derived from a 12 or 25 word mnemonic.
+```shell
+const HDWalletProvider = require("truffle-hdwallet-provider");
+```
+Mnemonic:-
+    Mnemonic phrases are a human-readable version of the private keys.
+    Mnemonic or seed phrases can range from 12 - 25 words depending on the blockchain ecosystem you are dealing with.
