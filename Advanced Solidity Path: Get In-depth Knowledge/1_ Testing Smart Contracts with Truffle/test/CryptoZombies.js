@@ -53,6 +53,7 @@ Hooks:-
 */            
 
 const CryptoZombies = artifacts.require("CryptoZombies");
+const utils = require("./helpers/utils");
 const zombieNames = ["Zombie 1", "Zombie 2"];
 contract("CryptoZombies", (accounts) => {
     let [alice, bob] = accounts;
@@ -73,6 +74,19 @@ contract("CryptoZombies", (accounts) => {
         assert.equal(result.logs[0].args.name,zombieNames[0]);
     })
     it("should not allow two zombies",async() => {
+        await contractInstance.createRandomZombie(zombieNames[0],{from:alice});
+        /*calling utils.js function:-
+              try {
+                //try to create the second zombie
+                await contractInstance.createRandomZombie(zombieNames[1], {from: alice});
+                assert(true);
+              }
+              catch (err) {
+                return;
+              }
+            assert(false, "The contract did not throw.");
+        */    
+        await utils.shouldThrow(contractInstance.createRandomZombie(zombieNames[1],{from:alice}));
 
     })
 })
